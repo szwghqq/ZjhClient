@@ -7,7 +7,7 @@ public class BaseActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.i("test1", "BaseActivity onResume");
+		Log.i("testdddd1", "BaseActivity onResume");
 		GameApplication.testNetCun();
 		GameApplication.currentActivity =this;
 	}
