@@ -29,7 +29,7 @@ public class LoginedReceiver implements CallBack {
 //					DGroupInfoItem groupItem;
 //					for(int i=0;i<size;i++){
 //						groupItem = GameApplication.list.get(i);
-//						if(groupItem.groupid==18001){
+//						if(groupItem.groupid==19001){
 //							//选择这个场登录
 //					       GameApplication.getSocketService().changRoom(groupItem);
 //					      break;
