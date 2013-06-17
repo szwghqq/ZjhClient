@@ -255,7 +255,7 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
 		//short code= (Short)data.get("code");
 		
 		Message msg =handler.obtainMessage();
-		msg.what=1;
+		msg.what=1;//中心服务器登陆成功
 		msg.obj=data;
 		handler.sendMessage(msg);
 		//if(code == 1){
@@ -269,7 +269,7 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
 		 System.out.println("DzpkGameStartActivity recvGameLoginResult");
 			HashMap data = (HashMap) e.getData();
 			Message msg =handler.obtainMessage();
-			msg.what=0;
+			msg.what=0;//游戏服务器登陆成功
 			msg.obj=data;
 			handler.sendMessage(msg);
 		
@@ -340,8 +340,8 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
 		    sendRequestLoginLingQu();
         }else{
 			Message msg = handler.obtainMessage();
-			msg.obj =event.getData();
-			msg.what=4;
+			msg.obj = event.getData();
+			msg.what = 4;
 			handler.sendMessage(msg);
         }
 	}
@@ -418,7 +418,7 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
 //        super.onAttachedToWindow();
 //    }
 	Handler handler = new Handler(){
-	 
+	   
 		public void handleMessage(Message msg) {
 			if(msg.what ==0){
 				//游戏
@@ -430,7 +430,7 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
 				//登录超时
 				GameUtil.openMessageDialog(DzpkGameLoginActivity.this,GameUtil.LOGINTIMEOUT);
 			}else if(msg.what ==4){
-				forward(null);
+				forward(null);//居然是通过这个来跳到下一个界面
 			}else if(msg.what ==5){
 				forward(msg.obj);
 			}
