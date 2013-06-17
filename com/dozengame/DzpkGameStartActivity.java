@@ -301,7 +301,7 @@ public class DzpkGameStartActivity extends BaseActivity implements Runnable,Call
 					int i=0;
 					for( i=0;i<size;i++){
 						groupItem = list.get(i);
-						if(groupItem.groupid==18001){
+						if(groupItem.groupid==19001){
 							//选择这个场登录
 					       GameApplication.getSocketService().changRoom(groupItem);
 					      break;

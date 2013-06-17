@@ -29,20 +29,12 @@ import com.dozengame.util.GameUtil;
 public class SocketService extends EventDispatcher implements CallBack {
 
 	final static String tag="SocketService";
-	// private static String ip = "10.0.2.2";
- 	// private static int port = 6000;
-    // private static String ip = "172.17.0.149";
+    private static String ip = "192.168.1.5";
+    private static int port = 6000;
 	 
-    private static String ip="113.108.228.187";
-    private static int port = 6100;
-	 
-    //private static String ip = "172.17.0.240";
-	// private static String ip = "172.17.0.103";
-//    private static String ip = "121.9.240.37 ";
-//	private static int port = 9300;
 	public static final String CMD_REQUEST_LOGIN = "RQLG";// 请求登陆
 	private static final String CMD_REQUEST_GROUP_INFO = "RQGI";// 请求获取房间列表
-	public static String sendGetAreaInfo = "dznew|ddz|zjh|mj|soha|tlj|sdh|pdk|dz2|lzdz|cdd|hldz|tex";
+	public static String sendGetAreaInfo = "dznew|ddz|zjh|mj|soha|tlj|sdh|pdk|dz2|lzdz|cdd|hldz|tex|zysz";
 	SocketBase gcSocket;
 	SocketBase gsSocket;
 	DNetworkCenter dnc;
@@ -224,7 +216,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 */
 	public static void sendLoginInfo(SocketBase socket, String strUsername,
 			String strPassword) {
-
+		System.out.println("sendLoginInfo:"+strUsername+" password="+strPassword);
 		try {
 			DConfig.strUser =strUsername;
 			 
@@ -305,7 +297,9 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @param item
 	 */
 	public void changRoom(DGroupInfoItem item) {
-
+		System.out.println("item.ip="+item.ip);
+		System.out.println("item.port="+item.port);
+		
 		try {
 			gsSocket = new SocketBase(item.ip, item.port);
 			gsSocket.CreateConnection();
