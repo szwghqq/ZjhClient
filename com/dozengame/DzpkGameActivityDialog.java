@@ -1125,6 +1125,7 @@ public class DzpkGameActivityDialog extends Dialog implements CallBack {
 		}};
 	
 	Handler handler = new Handler() {
+		@SuppressWarnings("rawtypes")
 		public void handleMessage(Message msg) {// 定义一个Handler，用于处理下载线程与UI间通讯
 			if (!Thread.currentThread().isInterrupted()) {
 				 
