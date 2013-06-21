@@ -77,9 +77,9 @@ public class RoomView extends LinearLayout implements CallBack{
         	
         };
 		adapter = new BaseListAdapter<DeskInfo>(context,
-				R.layout.gridviewitem, listItem, new String[] { 
+				R.layout.gridviewitem, listItem, new String[] { "img", 
 				   "Deskno","Name","RenNum","Bet","XieDai","Watchercount" }, 
-				   new int[] { R.id.roomId, R.id.roomName,R.id.renNum,R.id.mZhu ,R.id.xieDai ,R.id.pGuan},callback);
+				   new int[] { R.id.img, R.id.roomId, R.id.roomName,R.id.renNum,R.id.mZhu ,R.id.xieDai ,R.id.pGuan},callback);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
  

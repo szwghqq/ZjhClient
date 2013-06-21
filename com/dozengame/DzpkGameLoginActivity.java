@@ -318,7 +318,9 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
 	     it.putExtra("vtask_add", taskGold);
 	     it.putExtra("gold", gold);
 		 it.putExtra("allGold", allGold);
- 		 it.setClass(DzpkGameLoginActivity.this, DzpkGameMenuActivity.class);
+ 		 //it.setClass(DzpkGameLoginActivity.this, DzpkGameMenuActivity.class);
+ 		it.setClass(DzpkGameLoginActivity.this, DzpkGameRoomActivity.class);
+		 
  		 it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
  		 startActivity(it);
  		 finish();

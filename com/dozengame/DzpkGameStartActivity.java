@@ -428,7 +428,8 @@ public class DzpkGameStartActivity extends BaseActivity implements Runnable,Call
 	     it.putExtra("vtask_add", taskGold);
 	     it.putExtra("gold", gold);
 		 it.putExtra("allGold", allGold);
- 		 it.setClass(DzpkGameStartActivity.this, DzpkGameMenuActivity.class);
+ 		// it.setClass(DzpkGameStartActivity.this, DzpkGameMenuActivity.class);
+ 		it.setClass(DzpkGameStartActivity.this, DzpkGameRoomActivity.class);
  		 it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
  		 startActivity(it);
  		 finish();

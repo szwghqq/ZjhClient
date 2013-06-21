@@ -131,7 +131,6 @@ public class DzpkGameRoomActivity extends BaseActivity{
 		
 		findViewById(R.id.room).setBackgroundDrawable(new BitmapDrawable(hall_listbg));
 		findViewById(R.id.top).setBackgroundDrawable(new BitmapDrawable(hall_titlebg));
-		findViewById(R.id.title).setBackgroundDrawable(new BitmapDrawable(hall_listtitle));
 		findViewById(R.id.bottom).setBackgroundDrawable(new BitmapDrawable(hall_bottombg));
 	     ImageView backImage=(ImageView)findViewById(R.id.back);
 	     backImage.setImageBitmap(hall_back);
@@ -142,11 +141,8 @@ public class DzpkGameRoomActivity extends BaseActivity{
 		 pageLeft=(ImageView)findViewById(R.id.pageLeft);
 		 pageLeft.setImageBitmap(hall_pageLeft2);
 		 
-		 pageRight=(ImageView)findViewById(R.id.pageRight);
-		 pageRight.setImageBitmap(hall_pageRight1);
 		 
-		 displaySetBg=(ImageView)findViewById(R.id.displaySet);
-		 displaySetBg.setImageBitmap(hall_button1);
+
 		 
 		 prev=(ImageView)findViewById(R.id.prev);
 		 prev.setImageBitmap(hall_btnPrev1);
@@ -159,62 +155,7 @@ public class DzpkGameRoomActivity extends BaseActivity{
 	     
 	     TextView quickStartText=(TextView)findViewById(R.id.quickStartText);
 	     quickStartText.setTextColor(Color.BLACK);
-	     
-	     roomId=(TextView)findViewById(R.id.roomId);
-	     roomName=(TextView)findViewById(R.id.roomName);
-	     renNum=(TextView)findViewById(R.id.renNum);
-	     rebet=(TextView)findViewById(R.id.rebet);
-	     xiedai=(TextView)findViewById(R.id.xiedai);
-	     pangguan=(TextView)findViewById(R.id.pangguan);
-	     OnTouchListener listener= new OnTouchListener(){
-	    	 
-				public boolean onTouch(View view,MotionEvent event) {
-					TextView v =(TextView)view;
-					 
-					if(event.getAction() ==1){
-						if(roomId == v){
-							executeTitleClickSort(0);
-						}else if(roomName == v){
-							executeTitleClickSort(1);
-						}else if(renNum == v){
-							executeTitleClickSort(2);
-						}else if(rebet == v){
-							executeTitleClickSort(3);
-						}else if(xiedai == v){
-							executeTitleClickSort(4);
-						}else if(pangguan == v){
-							executeTitleClickSort(5);
-						}
-						v.setBackgroundResource(0);
-						v.setGravity(Gravity.CENTER);
-						return true;
-					}else if(event.getAction() == 0){
-						v.setBackgroundResource(R.drawable.title_bg);
-						v.setGravity(Gravity.CENTER);
-						return true;
-					}
-					return false;
-				} 
-		     };
-		     
-	     roomId.setOnTouchListener(listener);
-	     roomName.setOnTouchListener(listener);
-	     renNum.setOnTouchListener(listener);
-	     rebet.setOnTouchListener(listener);
-	     xiedai.setOnTouchListener(listener);
-	     pangguan.setOnTouchListener(listener);
-		 addListener();
-	}
-	private void executeTitleClickSort(int titleIndex){
-		int index =flipper.getDisplayedChild();
-		RoomView rv=(RoomView) flipper.getChildAt(index);
-		rv.sort(titleIndex,state[titleIndex]);
-		if(state[titleIndex] ==1){
-		  state[titleIndex] =0;
-		}
-		else{
-		 state[titleIndex] =1;
-		}
+	     addListener();
 	}
 	/**
 	 * ·µ»Ø
@@ -235,53 +176,13 @@ public class DzpkGameRoomActivity extends BaseActivity{
      */
     private void addListener(){
 
-    	backImageBg.setOnTouchListener(new OnTouchListener(){
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				final int action =event.getAction();
-			    if(action == 0){
-			    	backImageBg.setImageBitmap(hall_button2);
-			    	return true;
-			    }else if(action ==1){
-			    	backImageBg.setImageBitmap(hall_button1);
-			    	back();
-			    	return true;
-			    }
-				return false;
-			}
-    		
-    	});
-    	displaySetBg.setOnTouchListener(new OnTouchListener(){
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				final int action =event.getAction();
-			    if(action == 0){
-			    	displaySetBg.setImageBitmap(hall_button2);
-			    	return true;
-			    }else if(action ==1){
-			    	displaySetBg.setImageBitmap(hall_button1);
-			    	displaySetDialog();
-			    	return true;
-			    }
-				return false;
-			}
-    		
-    	});
     	pageLeft.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				pageLeft.setImageBitmap(hall_pageLeft2);
 				pageRight.setImageBitmap(hall_pageRight1);
 			}
 		 });
-		pageRight.setOnClickListener(new OnClickListener(){
-				public void onClick(View v) {
-					GameUtil.openMessageDialog(DzpkGameRoomActivity.this,GameUtil.msg5);
-					//pageRight.setImageBitmap(hall_pageRight2);
-					//pageLeft.setImageBitmap(hall_pageLeft1);
-				}
-		  });
+		
 		
 		prev.setOnTouchListener(new OnTouchListener(){
 
