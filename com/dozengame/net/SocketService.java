@@ -15,10 +15,9 @@ import com.dozengame.event.CallBack;
 import com.dozengame.event.Event;
 import com.dozengame.event.EventDispatcher;
 import com.dozengame.event.TexEventType;
+import com.dozengame.event.ZjhEventType;
 import com.dozengame.net.pojo.DConfig;
 import com.dozengame.net.pojo.DGroupInfoItem;
-import com.dozengame.net.task.Task;
-import com.dozengame.net.task.TaskExecutor;
 import com.dozengame.net.task.TaskExecutorAdapter;
 import com.dozengame.net.task.TaskManager;
 import com.dozengame.util.DUtils;
@@ -29,11 +28,7 @@ import com.dozengame.util.GameUtil;
 public class SocketService extends EventDispatcher implements CallBack {
 
 	final static String tag="SocketService";
-    //private static String ip = "192.168.123.1";//公司
-	private static String ip = "192.168.1.3";//笔记本
-	//private static String ip = "192.168.1.6";//台式机
-	
-    
+    private static String ip = "192.168.1.101";
     private static int port = 6000;
 	 
 	public static final String CMD_REQUEST_LOGIN = "RQLG";// 请求登陆
@@ -43,7 +38,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	SocketBase gsSocket;
 	DNetworkCenter dnc;
 	DNetworkGame dnGame;
-	DNetworkTex  dntex;
+	DNetworkZjh  dntex;
 	DNetworkGameFriend	dnfriend;
 	DNetworkVip dnvip;
 	public SocketService(){
@@ -142,14 +137,14 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @throws Exception
 	 */
 	public void sendRequestTXNTBC() throws Exception {
-		dntex.sendRequestTXNTBC();
+		//dntex.sendRequestTXNTBC();
 	}
 	/**
 	 * 发送快速开始
 	 * @param chouma
 	 */
 	public void sendRequestQuickStart(int chouma)throws Exception{
-		dntex.sendRequestQuickStart(chouma);
+		//dntex.sendRequestQuickStart(chouma);
 	}
 	/**
 	 * 请求返回大厅
@@ -310,7 +305,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 			if (gsSocket.isConnected()) {
 				Log.i("test2","connect success: " + item.ip + ":" + item.port);
 				dnGame = new DNetworkGame(gsSocket);
-				dntex=new DNetworkTex(gsSocket);
+				dntex=new DNetworkZjh(gsSocket);
 				dnfriend=new DNetworkGameFriend(gsSocket);
 				dnvip=new DNetworkVip(gsSocket);
 				addGameEventListener();
@@ -333,7 +328,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @throws Exception 
 	  */
 	 public void sendBuyChouma(final int gold,final int deskNo,final int sitNo) throws Exception{
-		 dntex.sendBuyChouma(gold, deskNo, sitNo);
+		 //dntex.sendBuyChouma(gold, deskNo, sitNo);
 	 }
 	 /**
 	  * 登录发送手机信息
@@ -562,7 +557,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @throws Exception
 	 */
 	public void sendRequestDeskInfo(int deskno) throws Exception {
-         dntex.sendRequestDeskInfo(deskno);
+         //dntex.sendRequestDeskInfo(deskno);
 	}
 	/**
 	 * 加入桌子
@@ -612,7 +607,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	public void sendClickXiaZhu(int gold,int type)throws Exception{
 		 
 			System.out.println("sendClickXiaZhu: gold: "+gold+" type: "+type);
-			dntex.sendClickXiaZhu(gold, type);
+			//dntex.sendClickXiaZhu(gold, type);
 		 
 	}
 
@@ -622,7 +617,7 @@ public class SocketService extends EventDispatcher implements CallBack {
      */
 	public void sendClickTex() throws Exception {
 		System.out.println("sendClickTex");
-		dntex.sendClickTex();
+		//dntex.sendClickTex();
 	}
 	/**
 	 * 发送不下注
@@ -630,7 +625,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 */
 	public void sendClickBuxia() throws Exception {
 		System.out.println("sendClickBuxia");
-		dntex.sendClickBuxia();
+		//dntex.sendClickBuxia();
 		
 	}
 	/**
@@ -639,7 +634,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 */
 	public void sendClickFollow() throws Exception {
 		System.out.println("sendClickBuxia");
-		dntex.sendClickFollow();
+		//dntex.sendClickFollow();
 	}
 	 /**
 	  * 发送放弃
@@ -654,7 +649,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @throws Exception
 	 */
 	public void sendRequestKickIsShow() throws Exception{
-		dntex.sendRequestKickIsShow();
+		//dntex.sendRequestKickIsShow();
 	}
 	/**
 	 * 请求救济
@@ -662,7 +657,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 */
 	public void sendRequestJiuJi() throws Exception {
 		// TODO Auto-generated method stub
-		dntex.sendRequestJiuJi();
+		//dntex.sendRequestJiuJi();
 	}
 	/**
 	 * 发送表情
@@ -670,7 +665,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @throws Exception
 	 */
 	public void sendPlayEmot(int emotid)throws Exception {
-		dntex.sendPlayEmot(emotid);
+		//dntex.sendPlayEmot(emotid);
 	}
 	/**
 	 * 发送聊天内容
@@ -678,7 +673,7 @@ public class SocketService extends EventDispatcher implements CallBack {
 	 * @throws Exception
 	 */
 	public void sendDeskChat(String chatText)throws Exception{
-		dntex.sendDeskChat(chatText);
+		//dntex.sendDeskChat(chatText);
 	}
 	/*********************好友相关请求*******************************/
 	// 请求游戏者附加信息和成就信息
@@ -1085,6 +1080,10 @@ public class SocketService extends EventDispatcher implements CallBack {
    
 	private void addTexEventListener(){  
 		  
+		dntex.addEventListener(ZjhEventType.ON_ZJH_RECV_SITDOWN, this, "onRecvSitDown");		//坐下
+		dntex.addEventListener(ZjhEventType.ON_ZJH_RECV_STANDUP,this,"onRecvStaneUp");			//站起
+		
+		//-----------------------------------------------------------------------------------------------------
 		dntex.addEventListener(TexEventType.ON_TEX_RECV_RESETDISPLAY ,this,"onRecvResetDisplay");//恢复显示	
 		dntex.addEventListener(TexEventType.ON_TEX_RECV_TEX_READY ,this,"onRecvReady");			//收到准备
 		dntex.addEventListener(TexEventType.ON_TEX_RECV_FAPAI,this,"onRecvFaPai");			//收到发牌	
@@ -1200,6 +1199,11 @@ public class SocketService extends EventDispatcher implements CallBack {
 	private void removeTexEventListener(){ 
 		if(dntex == null)return;
 		 
+		dntex.removeEventListener(ZjhEventType.ON_ZJH_RECV_SITDOWN, this, "onRecvSitDown");		//坐下
+		dntex.removeEventListener(ZjhEventType.ON_ZJH_RECV_STANDUP,this,"onRecvStaneUp");		//站起
+		
+		//-----------------------------------------------------------------------------------------------------
+		
 		dntex.removeEventListener(TexEventType.ON_TEX_RECV_RESETDISPLAY ,this,"onRecvResetDisplay");//恢复显示	
 		dntex.removeEventListener(TexEventType.ON_TEX_RECV_TEX_READY ,this,"onRecvReady");			//收到准备
 		dntex.removeEventListener(TexEventType.ON_TEX_RECV_FAPAI,this,"onRecvFaPai");			//收到发牌	
