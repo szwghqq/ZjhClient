@@ -28,7 +28,7 @@ import com.dozengame.util.GameUtil;
 public class SocketService extends EventDispatcher implements CallBack {
 
 	final static String tag="SocketService";
-    private static String ip = "192.168.1.101";
+    private static String ip = "192.168.1.3";
     private static int port = 6000;
 	 
 	public static final String CMD_REQUEST_LOGIN = "RQLG";// ÇëÇóµÇÂ½

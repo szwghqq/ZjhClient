@@ -68,7 +68,7 @@ public class RoomView extends LinearLayout implements CallBack{
 					 if(obj != null && obj.length ==1){
 						 Integer pos = (Integer)obj[0];
 						 DeskInfo deskInfo= (DeskInfo)listView.getItemAtPosition(pos);
-						  addDesk(deskInfo);
+						  enterDesk(deskInfo);
 					 }
 				}else{
 					loadStart();
@@ -89,7 +89,7 @@ public class RoomView extends LinearLayout implements CallBack{
 	 * ¼ÓÈë×À×Ó
 	 * @param deskInfo
 	 */
-	private void addDesk(DeskInfo deskInfo){
+	private void enterDesk(DeskInfo deskInfo){
 		 setScrollEnable(true);
 		 Intent intent =new Intent(context,DzpkGameActivity.class);
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

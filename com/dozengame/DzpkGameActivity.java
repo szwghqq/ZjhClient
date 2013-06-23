@@ -43,10 +43,12 @@ public class DzpkGameActivity extends Activity{
 		frameLayout=(FrameLayout)findViewById(R.id.mainLayout);
 		setGameDeskBackImg(1);
 		//添加计时器
-		addJsqView();
-		dialog = new PlayerDialog(this,R.style.dialog);
-		dialog.show();
+//		addJsqView();
+//		dialog = new PlayerDialog(this,R.style.dialog);
+//		dialog.show();
 		loadIng();
+		//todo
+		//1.向服务端发请求桌子信息
 	}
 	
 	/**

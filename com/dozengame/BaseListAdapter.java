@@ -103,18 +103,18 @@ public class BaseListAdapter<T> extends BaseAdapter {
 			public boolean onTouch(View v, MotionEvent event) {
 				 if(currentView != null && currentView != v){
 					 setViewTextColor(currentView,Color.WHITE);
-					 currentView.setBackgroundResource(0);
+					 //currentView.setBackgroundResource(0);
 				 }
 				 currentView =(ViewGroup)v;
 				 if(event.getAction() ==0){
 					 startx = event.getX();
 					 starty = event.getY();
-					 setViewTextColor(currentView,R.color.black);
-					 currentView.setBackgroundResource(R.drawable.hall_list);
+					 setViewTextColor(currentView,Color.WHITE);
+					// currentView.setBackgroundResource(R.drawable.hall_list);
 					 
 				 }else  if(event.getAction() == 1){
 					 setViewTextColor(currentView,Color.WHITE);
-					 currentView.setBackgroundResource(0);
+					// currentView.setBackgroundResource(0);
 					 if(call != null){
 						 call.CallBack(position);
 					 }
@@ -122,12 +122,12 @@ public class BaseListAdapter<T> extends BaseAdapter {
 					 float temp = event.getX()-startx;
 					 if(temp > 10  || temp < -10){
 						 setViewTextColor(currentView,Color.WHITE);
-						 currentView.setBackgroundResource(0);
+						// currentView.setBackgroundResource(0);
 					 }else{
 						 temp = event.getY() -starty;
 						 if(temp > 10  || temp < -10){
 							 setViewTextColor(currentView,Color.WHITE);
-							 currentView.setBackgroundResource(0);
+							 //currentView.setBackgroundResource(0);
 						 }
 					 }
 				 }
