@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import com.dozengame.event.CallBack;
 import com.dozengame.event.Event;
 import com.dozengame.event.TexEventType;
+import com.dozengame.event.ZjhEventType;
 import com.dozengame.gameview.BuyChouMaDialog;
 import com.dozengame.gameview.CheckNetThread;
 import com.dozengame.gameview.CheckNetView;
@@ -723,8 +724,7 @@ public class DzpkGameActivityDialog extends Dialog implements CallBack {
 		service.addEventListener(TexEventType.ON_TEX_RECV_FAPAI, this,
 		"onTexRecvFaPai");
 		//侦听玩家坐下信息
-		service.addEventListener(TexEventType.ON_TEX_RECV_SITDOWN, this,
-		"onTexRecvSitDown");
+		service.addEventListener(ZjhEventType.ON_ZJH_RECV_SITDOWN, this, "onRecvSitDown");
 		// 侦听桌子信息
 		service.addEventListener(TexEventType.ON_TEX_RECV_DESK_INFO, this,
 				"onTexRecvDeskInfo");
@@ -735,8 +735,7 @@ public class DzpkGameActivityDialog extends Dialog implements CallBack {
 		service.addEventListener(TexEventType.ON_TEX_RECV_PLAYERINFO, this,
 		"onTexRecvPlayerInfo");
 		//侦听桌内聊天
-		service.addEventListener(TexEventType.ON_TEX_RECV_CHAT, this,
-						"onTexRecvChat");
+		service.addEventListener(TexEventType.ON_TEX_RECV_CHAT,  this, 	"onTexRecvChat");
 		service.addEventListener(TexEventType.ON_TEX_RECV_PLAY_EMOT, this,
 				"onTexRecvEmot");
 	}
@@ -814,8 +813,8 @@ public class DzpkGameActivityDialog extends Dialog implements CallBack {
 		service.removeEventListener(TexEventType.ON_TEX_RECV_FAPAI, this,
 		"onTexRecvFaPai");
 		//侦听玩家坐下信息
-		service.removeEventListener(TexEventType.ON_TEX_RECV_SITDOWN, this,
-		"onTexRecvSitDown");
+		service.removeEventListener(ZjhEventType.ON_ZJH_RECV_SITDOWN, this,
+		"onRecvSitDown");
 		// 侦听桌子信息
 		service.removeEventListener(TexEventType.ON_TEX_RECV_DESK_INFO, this,
 				"onTexRecvDeskInfo");
@@ -987,8 +986,8 @@ public class DzpkGameActivityDialog extends Dialog implements CallBack {
 	 * 玩家坐下
 	 * @param e
 	 */
-	public void onTexRecvSitDown(Event e){
-		Log.i(tag, "onTexRecvSitDown");
+	public void onRecvSitDown(Event e){
+		Log.i(tag, "onRecvSitDown");
 		sendMsg(recvSitDown, e.getData());
 	}
 	/**

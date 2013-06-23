@@ -20,284 +20,74 @@ public class DNetworkZjh extends DNetwork {
 
 	private final String CMD_NOTIFY_ZJH_SITDOWN = "RESD"; // 用户坐下
 	private final String CMD_NOTIFY_ZJH_STANDUP = "NTSU"; // 用户站起
-	private final String CMD_NOTIFY_ZJH_START = "NTST"; // 用户开始
-	private final String CMD_NOTIFY_ZJH_DESK_INFO = "NTDT"; // 收到本桌各座位的状态
-	private final String CMD_NOTIFY_ZJH_FAPAI = "NTFP"; // 收到发牌
-	private final String CMD_NOTIFY_ZJH_KANPAI = "NTKP"; // 收到看牌的内容
-	private final String CMD_NOTIFY_ZJH_XIAZHU = "SRXZ"; // 收到下注成功信息
-	private final String CMD_NOTIFY_ZJH_GAMEOVER = "NTGO"; // 收到游戏结束的消息
-	private final String CMD_NOTIFY_ZJH_REFRESHGOLD = "RESC"; // 收到金币刷新消息
-	private final String CMD_NOTIFY_ZJH_GIVEUP = "SRFQ"; // 收到投降消息
-	private final String CMD_NOTIFY_ZJH_ROOMINFO = "REIF"; // 收到获得房间信息
-	private final String CMD_NOTIFY_ZJH_ROOMBASICINFO = "RMIF"; // 收到获得房间基本信息
-	private final String CMD_NOTIFY_ZJH_RECVBIPAISITE = "SRBP"; // 收到可以比牌的座位号
-	private final String CMD_NOTIFY_ZJH_RECVOFFLINESITE = "NTTO"; // 收到离线的座位号
-	private final String CMD_NOTIFY_ZJH_RELOGIN = "NTGR"; // 收到掉线用户重登录
-	private final String CMD_NOTIRY_ZJH_RELOGIN_ACTION = "REAI"; // 收到动作信息
-	private final String CMD_NOTIRY_ZJH_CLICKCAICHI = "SNCC"; // 收到有人点击彩池
-	private final String CMD_NOTIRY_ZJH_GETCAICHIINFO = "CTIF"; // 收到彩池信息
-	private final String CMD_NOTIRY_ZJH_FOLLOWDEAD = "SRGS"; // 收到跟死信息
-	private final String CMD_RESPONSE_ZJH_TIMEOUT = "REKU"; // 收到自己超时
-	private final String CMD_RESPONSE_ZJH_GETCAICHI = "CCOK"; // 收到自己中了彩池
-	private final String CMD_RESPONSE_ZJH_CHOUSHUINUM = "CSNUM";
+	private final String CMD_NOTIFY_ZJH_START = "ZYSZNTST"; // 用户开始
+	private final String CMD_NOTIFY_ZJH_PLAYER_STATUS = "ZYSZNTZT"; // 收到本桌各座位的状态
+	private final String CMD_NOTIFY_ZJH_FAPAI = "ZYSZNTFP"; // 收到发牌
+	private final String CMD_NOTIFY_ZJH_KANPAI = "ZYSZNTKP"; // 收到看牌的内容
+	private final String CMD_NOTIFY_ZJH_XIAZHU = "ZYSZSRXZ"; // 收到下注成功信息
+	private final String CMD_NOTIRY_ZJH_BIPAI_SUCCESS = "ZYSZSRKP"; // 收到（开牌）比牌完
+	private final String CMD_NOTIFY_ZJH_AUTO_BIPAI = "ZYSZNTGO"; // 收到自动比牌（开牌）游戏结算
+	private final String CMD_NOTIFY_ZJH_GIVEUP = "ZYSZSRFQ"; // 收到投降消息
+	private final String CMD_NOTIRY_ZJH_CLICKCAICHI = "ZYSZCC"; // 收到有人点击彩池
+	private final String CMD_NOTIFY_ZJH_CHANGE_CAICHI_SUMGOLD = "ZYSZSNCC"; // 收到改变彩池总金额
+	private final String CMD_NOTIFY_ZJH_GET_CAICHI_SUMGOLD = "ZYSZCTIF"; // 收到彩池总金额
+	private final String CMD_RESPONSE_ZJH_GETCAICHI = "ZYSZCCOK"; // 收到自己中了彩池
+	private final String CMD_NOTIFY_ZJH_BUTTON_STATUS = "ZYSZPAIF"; // 收到设置按钮对应的动作(面板)
+	private final String CMD_NOTIFY_ZJH_KICK_USER = "ZYSZREKU"; // 收到自己超时
+	private final String CMD_NOTIFY_ZJH_GUANZHAN_STATE = "GZZT"; // 收到观战状态
+	private final String CMD_NOTIFY_ZJH_GUANZHAN_FAPAI = "GZFP"; // 观战发牌
+	private final String CMD_NOTIFY_ZJH_WATCH = "REWT"; // 收到观战
+	private final String CMD_NOTIFY_ZJH_EXIT_WATCH = "EXWT"; // 收到清除牌桌
 
 	public DNetworkZjh(SocketBase net_ptr) {
 		super(net_ptr);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void getNextStep(ReadData rd) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private HashMap getPokeList(ReadData rd) {
 		HashMap data = new HashMap();
-		data.put("actor", rd.readByte());
-		data.put("btnlook", rd.readByte());
-		data.put("btnvs", rd.readByte());
-		data.put("btnxiazhu", rd.readByte());
-		data.put("btnjiazhu", rd.readByte());
-		data.put("btnfollow", rd.readByte());
-		data.put("btngiveup", rd.readByte());
-		data.put("actor", rd.readByte());
-		data.put("actor", rd.readByte());
-		data.put("actor", rd.readByte());
-		data.put("actor", rd.readByte());
-		this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_BUTTON_STATUS, data));
+		int pokeNum = rd.readByte(); // 牌数
+		data.put("pokeNum", pokeNum);
+		if (pokeNum > 0) {
+			ArrayList list = new ArrayList();
+			for (int i = 0; i < pokeNum; i++) {
+				list.add(rd.readByte());
+			}
+			data.put("pokeList", list);
+		}
+		data.put("pokeType", rd.readByte());
+		return data;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private ArrayList getGameOverWinnerLoserData(ReadData rd, int num, String str, int gold) {
+		ArrayList list = new ArrayList();
+		HashMap temp = null;
+		for (int i = 0; i < num; i++) {
+			temp = new HashMap();
+			temp.put("site", rd.readByte()); // 座位号
+			if (str.equals("win")) {
+				temp.put("gold", rd.readInt());// 玩家得到多少钱//结算收回多少
+				temp.put("wingold", rd.readInt());// 赢了多少
+			} else if (str.equals("lose")) {
+				temp.put("wingold", rd.readInt());// 输了多少 或 单个人赢了多少
+			}
+			temp.put("poke", getPokeList(rd));
+
+			if (i == 0 && gold != -999) {
+				temp.put("gold", gold);
+			}
+			list.add(temp);
+		}
+		return list;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void onProcessCommand(ReadData rd) {
 
 		String strCmd = rd.getStrCmd();
 		Log.i(tag, " DNetworkTjh receive command: " + strCmd);
-		if (CMD_NOTIRY_ZJH_FOLLOWDEAD.equals(strCmd)) {
-
-			// 跟死
-			HashMap data = new HashMap();
-			data.put("siteno", rd.readInt()); // 跟死的座位号
-			data.put("leaderpeople", rd.readByte()); // 领牌人
-			data.put("betmoney", rd.readInt()); // 跟死的人的下注总金额
-			data.put("alonebetmoney", rd.readInt()); // 上一注的下注金额（扣除明牌翻倍以及比牌翻倍作用的金额），用作跟注及加注等使用
-			data.put("showbetmoney", rd.readInt()); // 显示的下注金额
-			data.put("totalbetmoney", rd.readInt()); // 台面总金额
-			getNextStep(rd);
-			data.put("timeout", rd.readInt()); // 台面总金额
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_FOLLOWDEAD,
-					data));
-
-		} else if (CMD_NOTIRY_ZJH_CLICKCAICHI.equals(strCmd)) {
-
-			// 收到点击彩池
-			HashMap data = new HashMap();
-			data.put("money", rd.readInt()); // 当前彩池总金额;
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_CAICHICLICK,
-					data));
-
-		} else if (CMD_NOTIRY_ZJH_GETCAICHIINFO.equals(strCmd)) {
-
-			// 收到彩池信息
-			HashMap data = new HashMap();
-			data.put("borcastall", rd.readByte());
-			data.put("addmoney", rd.readInt());
-			data.put("sumgold", rd.readInt());
-			data.put("winuser", rd.readString());
-			data.put("wintime", rd.readString());
-			data.put("winmoney", rd.readInt());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_CAICHIINFO,
-					data));
-
-		} else if (CMD_NOTIRY_ZJH_RELOGIN_ACTION.equals(strCmd)) {
-
-			// 收到重登录动作按钮
-			HashMap data = new HashMap();
-			data.put("relogin", 1);
-			data.put("timeout", rd.readInt());
-			this.dispatchEvent(new Event(
-					ZjhEventType.ON_ZJH_RECV_RELOGIN_ACTION, data));
-
-		} else if (CMD_NOTIFY_ZJH_RELOGIN.equals(strCmd)) {
-
-			// 收到掉线用户重登录消息
-			HashMap data = new HashMap();
-			data.put("deskno", rd.readShort());
-			data.put("siteno", rd.readByte());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_RELOGIN, data));
-
-		} else if (CMD_NOTIFY_ZJH_RECVOFFLINESITE.equals(strCmd)) {
-
-			// 收到离线消息
-			HashMap data = new HashMap();
-			data.put("deskno", rd.readShort());
-			data.put("siteno", rd.readByte());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_OFFLINESITE,
-					data));
-
-		} else if (CMD_RESPONSE_ZJH_GETCAICHI.equals(strCmd)) {
-
-			// 收到自己中了彩池
-			HashMap data = new HashMap();
-			data.put("money", rd.readInt());
-			this.dispatchEvent(new Event(
-					ZjhEventType.ON_ZJH_RECV_GET_CAICHI_PRIZE, data));
-
-		} else if (CMD_RESPONSE_ZJH_CHOUSHUINUM.equals(strCmd)) {
-
-			// 收到抽水多少
-			HashMap data = new HashMap();
-			data.put("choushui", rd.readInt());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_CHOUSHUINUM,
-					data));
-
-		} else if (CMD_RESPONSE_ZJH_TIMEOUT.equals(strCmd)) {
-
-			// 收到自己超时
-			HashMap data = new HashMap();
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_TIMEOUT, data));
-
-		} else if (CMD_NOTIFY_ZJH_RECVBIPAISITE.equals(strCmd)) {
-
-			// 收到可以比牌的座位号
-			HashMap data = new HashMap();
-			data.put("desksite", rd.readByte());
-			int len = rd.readByte();
-			data.put("count", len);
-
-			ArrayList list = new ArrayList();
-			HashMap temp = null;
-			for (int i = 0; i < len; i++) {
-				temp = new HashMap();
-				temp.put("site", rd.readByte());
-				data.put(i, temp);
-			}
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_BIPAISITE,
-					data));
-
-		} else if (CMD_NOTIFY_ZJH_ROOMBASICINFO.equals(strCmd)) {
-
-			// 收到刷新房间基本信息
-			HashMap data = new HashMap();
-			data.put("groupname", rd.readString());// 房间名称
-			data.put("deskno", rd.readInt());// 桌号
-			data.put("peilv", rd.readInt());// 赔率
-			data.put("miniGold", rd.readInt());
-			data.put("g_minalonebetmoney", rd.readInt());
-			data.put("g_maxalonemoney", rd.readInt());
-			data.put("g_maxbetmoney", rd.readInt());
-			data.put("caichiaddmoney", rd.readInt());
-			this.dispatchEvent(new Event(
-					ZjhEventType.ON_ZJH_RECV_ROOMBASICINFO, data));
-
-		} else if (CMD_NOTIFY_ZJH_ROOMINFO.equals(strCmd)) {
-
-			// 收到刷新房间信息
-			HashMap data = new HashMap();
-			data.put("mysiteno", rd.readByte());
-			data.put("mydeskno", rd.readInt());
-			data.put("myislook", rd.readInt());
-
-			if ((Integer) data.get("myislook") == 1) {
-				data.put("num1", rd.readByte());
-				data.put("num2", rd.readByte());
-				data.put("num3", rd.readByte());
-			}
-
-			data.put("g_nextActor", rd.readByte());
-			data.put("leader", rd.readByte());
-			data.put("l_zhuangjia", rd.readByte());
-			data.put("l_money", rd.readInt());
-			data.put("alone_money", rd.readInt());
-			data.put("players", rd.readByte());
-			data.put("timeout", rd.readByte());
-			data.put("iscaichi", rd.readByte());
-
-			int len = (Integer) data.get("players");
-			HashMap temp = null;
-			for (int i = 0; i < len; i++) {
-				temp = new HashMap();
-				temp.put("l_site", rd.readByte());
-				temp.put("status", rd.readByte());
-				temp.put("imgidx", rd.readByte());
-				temp.put("l_look", rd.readByte());
-				data.put(i, temp);
-			}
-
-			data.put("nScore", rd.readInt());
-			data.put("l_zhuangjia", rd.readInt());
-			data.put("l_zhuangjia", rd.readInt());
-			data.put("l_zhuangjia", rd.readInt());
-
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_ROOMINFO,
-					data));
-
-		} else if (CMD_NOTIFY_ZJH_GIVEUP.equals(strCmd)) {
-
-			// 收到投降
-			HashMap data = new HashMap();
-			data.put("desksite", rd.readByte());
-			data.put("sex", rd.readByte());
-			data.put("imgidx", rd.readByte());
-			data.put("g_leader", rd.readByte());
-			getNextStep(rd);
-			data.put("timeout", rd.readInt());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_GIVEUP, data));
-
-		} else if (CMD_NOTIFY_ZJH_REFRESHGOLD.equals(strCmd)) {
-
-			// 刷新金币
-			HashMap data = new HashMap();
-			data.put("nScore", rd.readInt());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_REFRESHGOLD,
-					data));
-
-		} else if (CMD_NOTIFY_ZJH_GAMEOVER.equals(strCmd)) {
-
-			// 游戏结束，重开一局
-			HashMap data = new HashMap();
-			data.put("deskno", rd.readInt());// 哪一桌
-			data.put("siteno", rd.readByte());// 哪一座位号
-			data.put("winsite", rd.readByte());// 那座位号赢了，或者是谁退出
-			data.put("gameoverreason", rd.readByte());// 结束原因 1 正常结束, 2, 3 有人逃跑
-			data.put("begintimeout", rd.readByte());// 开始限制时间
-			data.put("betcountmoney", rd.readInt());// 桌面下注总金额
-			data.put("choushui", rd.readInt());// /抽水
-			data.put("winnick", rd.readString());// 赢家姓名
-			data.put("gold", rd.readInt());// 赢家总金币
-			data.put("players", rd.readByte());// 坐下的人数
-
-			int len = (Integer) data.get("players");
-			HashMap temp = null;
-			for (int i = 0; i < len; i++) {
-				temp = new HashMap();
-				temp.put("l_site", rd.readByte());
-				temp.put("l_status", rd.readByte());
-				temp.put("betmoney", rd.readInt());
-				temp.put("num1", rd.readByte());
-				temp.put("num2", rd.readByte());
-				temp.put("num3", rd.readByte());
-				data.put(i, temp);
-			}
-
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_GAMEOVER,
-					data));
-
-		} else if (CMD_NOTIFY_ZJH_XIAZHU.equals(strCmd)) {
-
-			// 用户下注
-			HashMap data = new HashMap();
-			data.put("siteno", rd.readByte());
-			data.put("sex", rd.readByte());
-			data.put("g_leader", rd.readByte());
-			data.put("money", rd.readInt());
-			data.put("alonemoney", rd.readInt());
-			data.put("aloneshowmoney", rd.readInt());
-			data.put("betmoney", rd.readInt());
-			data.put("xztype", rd.readByte());
-			data.put("bpSite", rd.readByte());
-			data.put("bpWin", rd.readByte());
-			data.put("loserimgidx", rd.readByte());
-			getNextStep(rd);
-			data.put("timeout", rd.readInt());
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_XIAZHUSUCC,
-					data));
-
-		} else if (CMD_NOTIFY_ZJH_SITDOWN.equals(strCmd)) {
+		if (CMD_NOTIFY_ZJH_SITDOWN.equals(strCmd)) {
 
 			// 用户坐下
 			HashMap data = new HashMap();
@@ -344,27 +134,10 @@ public class DNetworkZjh extends DNetwork {
 
 			// 收到用户点开始
 			HashMap data = new HashMap();
-			data.put("recode", rd.readInt());
-			data.put("currentuser", rd.readString());
-			data.put("deskno", rd.readInt());
-			data.put("siteno", rd.readInt());
-			data.put("notReadyNum", rd.readByte());
+			data.put("siteno", rd.readByte());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_ZJH_START, data));
 
-			int len = (Integer) data.get("notReadyNum");
-			HashMap temp = null;
-			ArrayList list1 = new ArrayList();
-			ArrayList list2 = new ArrayList();
-			for (int i = 0; i < len; i++) {
-				list1.add(i, rd.readByte());
-				list2.add(i, rd.readByte());
-			}
-			data.put("notReadySite", list1);
-			data.put("notReadyClock", list2);
-
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_ZJH_START,
-					data));
-
-		} else if (CMD_NOTIFY_ZJH_DESK_INFO.equals(strCmd)) {
+		} else if (CMD_NOTIFY_ZJH_PLAYER_STATUS.equals(strCmd)) {
 
 			// 收到本桌各座位的状态
 			HashMap data = new HashMap();
@@ -373,38 +146,32 @@ public class DNetworkZjh extends DNetwork {
 			HashMap temp = null;
 			for (int i = 0; i < len; i++) {
 				temp = new HashMap();
-				temp.put("siteno", rd.readInt());
-				temp.put("userid", rd.readString());
-				temp.put("startState", rd.readInt());
-				temp.put("face", rd.readInt());
-				temp.put("nick", rd.readString());
-				temp.put("gold", rd.readInt());
-				temp.put("provinceid", rd.readByte());
-				temp.put("cityname", rd.readString());
+				temp.put("siteno", rd.readByte());
+				temp.put("state", rd.readByte());
+				temp.put("timecount", rd.readByte());
 				data.put(i, temp);
 			}
-			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_DESK_INFO,
-					data));
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_PLAYER_STATUS, data));
 
 		} else if (CMD_NOTIFY_ZJH_FAPAI.equals(strCmd)) {
 			// 收到发牌
 			HashMap data = new HashMap();
-			data.put("siteno", rd.readByte());
-			data.put("minigold", rd.readInt());
+			HashMap playerData = new HashMap();
+
+			data.put("zhuangsite", rd.readByte());
+			data.put("dizhu", rd.readInt());
 			data.put("deskmoney", rd.readInt());
-			getNextStep(rd);
-			data.put("timeout", rd.readInt());
+			data.put("caichiAddgold", rd.readInt());
 			data.put("players", rd.readByte());
+			data.put("playerData", playerData);
 
 			int len = (Integer) data.get("players");
 			HashMap temp = null;
 			for (int i = 0; i < len; i++) {
 				temp = new HashMap();
 				temp.put("l_site", rd.readByte());// 座位号
-				temp.put("imgidx", rd.readByte());// 头像ID
-				data.put(i, temp);
+				playerData.put(i, temp);
 			}
-
 			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_FAPAI, data));
 
 		} else if (CMD_NOTIFY_ZJH_KANPAI.equals(strCmd)) {
@@ -412,11 +179,161 @@ public class DNetworkZjh extends DNetwork {
 			// 收到看牌
 			HashMap data = new HashMap();
 			data.put("siteno", rd.readByte());
-			data.put("sex", rd.readByte());
-			data.put("num1", rd.readByte());
-			data.put("num2", rd.readByte());
-			data.put("num3", rd.readByte());
+			data.put("poke", getPokeList(rd));
 			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_KANPAI, data));
+
+		} else if (CMD_NOTIFY_ZJH_XIAZHU.equals(strCmd)) {
+
+			// 用户下注
+			HashMap data = new HashMap();
+			data.put("siteno", rd.readByte());
+			data.put("betmoney", rd.readInt());
+			data.put("currbet", rd.readInt());
+			data.put("deskmoney", rd.readInt());
+			data.put("xztype", rd.readByte());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_XIAZHUSUCC, data));
+
+		} else if (CMD_NOTIRY_ZJH_BIPAI_SUCCESS.equals(strCmd)) {
+
+			// 收到（开牌）比牌完
+			HashMap data = new HashMap();
+			data.put("kaisiteno", rd.readByte());
+			data.put("deskmoney", rd.readInt());
+			data.put("betmoney", rd.readInt());
+			data.put("currbet", rd.readInt());
+			// 赢家信息
+			data.put("winner", getGameOverWinnerLoserData(rd, 1, "lose", (Integer) data.get("deskmoney")));
+			// 输家信息
+			data.put("loser", getGameOverWinnerLoserData(rd, 1, "lose", -999));
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_BIPAISUCC, data));
+
+		} else if (CMD_NOTIFY_ZJH_AUTO_BIPAI.equals(strCmd)) {
+
+			// 收到自动比牌（开牌）游戏结算
+			HashMap data = new HashMap();
+			data.put("doType", rd.readByte());// 1为下注触发，2为放弃触发
+			data.put("deskmoney", rd.readInt()); // 桌面总金额
+			int num = 0;
+			num = rd.readByte();// 多少人赢了
+			data.put("winners", getGameOverWinnerLoserData(rd, num, "win", -999));
+			num = rd.readByte();// 多少人输了
+			data.put("losers", getGameOverWinnerLoserData(rd, num, "lose", -999));
+
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_AUTO_BIPAI, data));
+
+		} else if (CMD_NOTIFY_ZJH_GIVEUP.equals(strCmd)) {
+
+			// 收到投降
+			HashMap data = new HashMap();
+			data.put("siteno", rd.readByte());
+			data.put("losemoney", rd.readInt());
+			int isover = rd.readByte();
+			data.put("isover", isover);
+			if (isover == 1) {
+				data.put("winsite", rd.readByte());
+				data.put("deskmoney", rd.readInt());
+				data.put("wingold", rd.readInt());
+				data.put("winpoke", getPokeList(rd));
+			}
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_GIVEUP, data));
+
+		} else if (CMD_NOTIRY_ZJH_CLICKCAICHI.equals(strCmd)) {
+
+			// 收到点击彩池
+			HashMap data = new HashMap();
+			data.put("siteno", rd.readByte());
+			data.put("touzhu", rd.readInt());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_CAICHICLICK, data));
+
+		} else if (CMD_NOTIFY_ZJH_CHANGE_CAICHI_SUMGOLD.equals(strCmd)) {
+
+			// 收到改变彩池总金额
+			HashMap data = new HashMap();
+			data.put("sumgold", rd.readInt());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_CHANGE_CAICHI_SUMGOLD, data));
+
+		} else if (CMD_NOTIFY_ZJH_GET_CAICHI_SUMGOLD.equals(strCmd)) {
+
+			// 收到彩池总金额
+			HashMap data = new HashMap();
+			data.put("sumgold", rd.readInt());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_CAICHI_SUMGOLD, data));
+
+		} else if (CMD_RESPONSE_ZJH_GETCAICHI.equals(strCmd)) {
+
+			// 收到自己中了彩池
+			HashMap data = new HashMap();
+			data.put("winnerid", rd.readInt());
+			data.put("borcastall", rd.readByte());
+			data.put("winuser", rd.readString());
+			data.put("wintime", rd.readString());
+			data.put("winmoney", rd.readInt());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_GET_CAICHI_PRIZE, data));
+
+		} else if (CMD_NOTIFY_ZJH_BUTTON_STATUS.equals(strCmd)) {
+
+			// 收到自己中了彩池
+			HashMap data = new HashMap();
+			data.put("actor", rd.readByte());
+			data.put("btnlook", rd.readByte());
+			data.put("btnvs", rd.readByte());
+			data.put("btnjiazhu", rd.readByte());
+			data.put("btnfollow", rd.readByte());
+			data.put("followgold", rd.readInt());
+			data.put("btngiveup", rd.readByte());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_BUTTON_STATUS, data));
+
+		} else if (CMD_NOTIFY_ZJH_KICK_USER.equals(strCmd)) {
+
+			// 收到自己超时
+			HashMap data = new HashMap();
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_KICK_USER, data));
+
+		} else if (CMD_NOTIFY_ZJH_GUANZHAN_STATE.equals(strCmd)) {
+
+			// 收到观战状态
+			HashMap data = new HashMap();
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_GUANZHAN_STATE, data));
+
+		} else if (CMD_NOTIFY_ZJH_GUANZHAN_FAPAI.equals(strCmd)) {
+
+			// 观战发牌
+			HashMap data = new HashMap();
+			int len = rd.readByte();
+			for (int i = 0; i < len; i++) {
+				data.put(i, rd.readByte());
+			}
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_GUANZHAN_FAPAI, data));
+
+		} else if (CMD_NOTIFY_ZJH_WATCH.equals(strCmd)) {
+
+			// 收到观战
+			HashMap data = new HashMap();
+			data.put("nick", rd.readString());
+			data.put("deskno", rd.readShort());
+			data.put("siteno", rd.readByte());
+
+			data.put("gold", rd.readInt());
+			data.put("dzcash", rd.readInt());
+			data.put("bean", rd.readInt());
+			data.put("homepeas", rd.readInt());
+
+			data.put("imgurl", rd.readString());
+			data.put("sex", rd.readByte());
+			data.put("startState", rd.readByte());
+			data.put("userid", rd.readInt());
+			data.put("channel", rd.readString());
+			data.put("exp", rd.readInt());
+			data.put("channelid", rd.readInt());
+			data.put("tour_point", rd.readInt());
+			data.put("recode", rd.readByte());
+			this.dispatchEvent(new Event(ZjhEventType.ON_ZJH_RECV_WATCH, data));
+
+		} else if (CMD_NOTIFY_ZJH_EXIT_WATCH.equals(strCmd)) {
+
+			// 收到退出观战
+			HashMap data = new HashMap();
+			this.dispatchEvent(new Event(ZjhEventType.CMD_ZJH_EXIT_WATCH, data));
 
 		} else if ("NTTT".equals(strCmd)) {
 
@@ -433,81 +350,81 @@ public class DNetworkZjh extends DNetwork {
 	}
 
 	// 发送点开始按钮
-	public void sendStart() throws Exception {
+	public void sendClickStart() throws Exception {
 
-		m_netptr.writeString("GCST");
+		m_netptr.writeString("ZYSZST");
 		m_netptr.writeEnd();
 	}
 
 	// 发送点彩池按钮
 	public void sendClickCaichi() throws Exception {
-		m_netptr.writeString("CKCC");
+		m_netptr.writeString("ZYSZCC");
 		m_netptr.writeEnd();
 	}
 
 	// 发送点放弃按钮
 	public void sendClickGiveUp() throws Exception {
 
-		m_netptr.writeString("YHFQ");
+		m_netptr.writeString("ZYSZFQ");
 		m_netptr.writeEnd();
 	}
 
-	// 获取比牌座位号
-	public void getBiPaiSite() throws Exception {
+	// 发送点开牌按钮
+	public void sendClickVS() throws Exception {
 
-		m_netptr.writeString("YHBP");
+		m_netptr.writeString("ZYSZBP");
 		m_netptr.writeEnd();
 	}
 
 	// 发送点看牌按钮
 	public void sendClickLook() throws Exception {
 
-		m_netptr.writeString("YHKP");
+		m_netptr.writeString("ZYSZKP");
 		m_netptr.writeEnd();
 	}
 
 	// 发送下注结果
-	public void sendXiaZhuData(int score, int xzType, int bpSite)
-			throws Exception {
-		m_netptr.writeString("YHXZ");
-		m_netptr.writeByte((byte) xzType);
-		m_netptr.writeInt(score);
-		m_netptr.writeByte((byte) bpSite);// --g_xztype = 4表示比牌下注，传入要比牌的座位号
+	public void sendClickJiazhu(int beishu) throws Exception {
+		m_netptr.writeString("ZYSZJZ");
+		m_netptr.writeInt(beishu);
 		m_netptr.writeEnd();
 	}
 
-	// 点下注按钮
-	public void sendClickXiaZhu() throws Exception {
+	// 发送跟注结果
+	public void sendClickGenzhu() throws Exception {
 
-		m_netptr.writeString("YHKP");
+		m_netptr.writeString("ZYSZGZ");
 		m_netptr.writeEnd();
 	}
 
-	// 发送接受新手任务
-	public void sendAcceptGuide() throws Exception {
+	// 发送发牌结束
+	public void sendFapaiOver() throws Exception {
 
-		m_netptr.writeString("RRAG");
+		m_netptr.writeString("ZYSZFO");
 		m_netptr.writeEnd();
 	}
 
-	// 发送重开一局请求
-	public void sendRestartGame() throws Exception {
+	// 强制退出游戏
+	public void sendForceOutGame() throws Exception {
 
-		m_netptr.writeString("YHCK");
+		m_netptr.writeString("ZYSZOG");
 		m_netptr.writeEnd();
 	}
 
-	// 发送刷新金币请求及房间信息
-	public void sendRefreshGold() throws Exception {
+	//请求观战游戏
+	public void sendClickWatch(int deskno) throws Exception {
 
-		m_netptr.writeString("RQSC");
+		m_netptr.writeString("REWTEX");
+		m_netptr.writeInt(deskno);
 		m_netptr.writeEnd();
 	}
 
-	// 发送刷新房间信息
-	public void sendReqRoomInfo() throws Exception {
+	// 请求坐下
+	public void sendClickSitdown(int deskno) throws Exception {
 
-		m_netptr.writeString("RQIF");
+		m_netptr.writeString("REAUSD");
+		m_netptr.writeInt(deskno);
+		m_netptr.writeByte((byte) 1);
 		m_netptr.writeEnd();
 	}
 
