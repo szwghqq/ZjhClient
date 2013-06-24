@@ -98,6 +98,10 @@ public class BaseListAdapter<T> extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 
 		View view= createViewFromResource(position, convertView, parent, layoutid);
+//		ImageView iv = new ImageView(context);//针对外面传递过来的Context变量，
+//        iv.setImageResource(R.drawable.logo2);      
+//        iv.setScaleType(ImageView.ScaleType.FIT_XY);		
+        
 		view.setOnTouchListener(new OnTouchListener(){
  
 			public boolean onTouch(View v, MotionEvent event) {

@@ -11,9 +11,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dozengame.event.CallBack;
 import com.dozengame.event.Event;
@@ -76,6 +76,8 @@ public class RoomView extends LinearLayout implements CallBack{
 			}
         	
         };
+//        ImageView imgview = (ImageView)findViewById(R.id.img);
+//        imgview.setImageResource(R.drawable.logo2);
 		adapter = new BaseListAdapter<DeskInfo>(context,
 				R.layout.gridviewitem, listItem, new String[] { "img", 
 				   "Deskno","Name","RenNum","Bet","XieDai","Watchercount" }, 
