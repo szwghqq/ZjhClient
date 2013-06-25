@@ -10,19 +10,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.dozengame.music.MediaManager;
@@ -179,7 +177,7 @@ public class DzpkGameRoomActivity extends BaseActivity{
     	pageLeft.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				pageLeft.setImageBitmap(hall_pageLeft2);
-				pageRight.setImageBitmap(hall_pageRight1);
+				//pageRight.setImageBitmap(hall_pageRight1);
 			}
 		 });
 		

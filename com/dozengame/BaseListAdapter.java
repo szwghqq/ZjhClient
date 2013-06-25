@@ -1,16 +1,19 @@
 package com.dozengame;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -94,46 +97,33 @@ public class BaseListAdapter<T> extends BaseAdapter {
 	ViewGroup currentView;
 	float startx;
 	float starty;
+
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-
+		
 		View view= createViewFromResource(position, convertView, parent, layoutid);
 //		ImageView iv = new ImageView(context);//针对外面传递过来的Context变量，
 //        iv.setImageResource(R.drawable.logo2);      
 //        iv.setScaleType(ImageView.ScaleType.FIT_XY);		
-        
+		try {
+			Bitmap hall_fill_bar = BitmapFactory.decodeStream(view.getContext().getAssets().open("hall_button.png"));
+			((ImageView) view.findViewById(R.id.imglog)).setImageBitmap(hall_fill_bar);
+			
+			((ImageView) view.findViewById(R.id.imglog3)).setImageBitmap(hall_fill_bar);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		view.setOnTouchListener(new OnTouchListener(){
  
 			public boolean onTouch(View v, MotionEvent event) {
 				 if(currentView != null && currentView != v){
 					 setViewTextColor(currentView,Color.WHITE);
-					 //currentView.setBackgroundResource(0);
 				 }
 				 currentView =(ViewGroup)v;
-				 if(event.getAction() ==0){
-					 startx = event.getX();
-					 starty = event.getY();
-					 setViewTextColor(currentView,Color.WHITE);
-					// currentView.setBackgroundResource(R.drawable.hall_list);
-					 
-				 }else  if(event.getAction() == 1){
-					 setViewTextColor(currentView,Color.WHITE);
-					// currentView.setBackgroundResource(0);
-					 if(call != null){
-						 call.CallBack(position);
-					 }
-				 }else{
-					 float temp = event.getX()-startx;
-					 if(temp > 10  || temp < -10){
-						 setViewTextColor(currentView,Color.WHITE);
-						// currentView.setBackgroundResource(0);
-					 }else{
-						 temp = event.getY() -starty;
-						 if(temp > 10  || temp < -10){
-							 setViewTextColor(currentView,Color.WHITE);
-							 //currentView.setBackgroundResource(0);
-						 }
-					 }
+				
+				 if((event.getAction() == 1 && call != null)){
+					 call.CallBack(position);
 				 }
 				return true;
 			}
@@ -171,15 +161,14 @@ public class BaseListAdapter<T> extends BaseAdapter {
 				temp = view.findViewById(fieldId[i]);
 				try {
 					 
-					Object obj = item.getClass()
-							.getMethod("get" + fieldName[i]).invoke(item);
+					Object obj = item.getClass().getMethod("get" + fieldName[i]).invoke(item);
 					if (temp instanceof TextView) {
 						if (obj != null) {
-							((TextView) temp).setText(obj.toString());
+							((TextView) temp).setText(obj.toString()+"aa");
 						}
 						 
 					} else if (temp instanceof ImageView) {
-						((ImageView) temp).setImageDrawable((Drawable) obj);
+						((ImageView) temp).setImageResource((Integer) obj);
 					}
 
 				} catch (Exception e) {

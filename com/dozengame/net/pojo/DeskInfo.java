@@ -2,8 +2,11 @@ package com.dozengame.net.pojo;
 
 import java.io.Serializable;
 
-import android.R;
-import android.widget.ImageView;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import com.dozengame.R;
 
 /**
  * 桌子信息
@@ -30,13 +33,20 @@ public class DeskInfo implements Serializable{
 	int watchercount; // 观战人数
 	byte start; // 是否开始 1=是 0=开始
 	byte showsitbtn;//是否显示坐下按钮
-	ImageView img; //这一行显示的图片
+	int imglog;
+	int imglog3;
 	
-	public ImageView getImg() {
-		return img;
+	public int getImglog3() {
+		return imglog3;
 	}
-	public void setImg(ImageView img) {
-		this.img = img;
+	public void setImglog3(int imglog3) {
+		this.imglog3 = imglog3;
+	}
+	public int getImglog() {
+		return imglog;
+	}
+	public void setImglog(int imglog) {
+		this.imglog = imglog;
 	}
 	public byte getShowsitbtn() {
 		return showsitbtn;

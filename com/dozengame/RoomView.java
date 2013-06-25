@@ -79,9 +79,9 @@ public class RoomView extends LinearLayout implements CallBack{
 //        ImageView imgview = (ImageView)findViewById(R.id.img);
 //        imgview.setImageResource(R.drawable.logo2);
 		adapter = new BaseListAdapter<DeskInfo>(context,
-				R.layout.gridviewitem, listItem, new String[] { "img", 
-				   "Deskno","Name","RenNum","Bet","XieDai","Watchercount" }, 
-				   new int[] { R.id.img, R.id.roomId, R.id.roomName,R.id.renNum,R.id.mZhu ,R.id.xieDai ,R.id.pGuan},callback);
+				R.layout.gridviewitem, listItem, new String[] { "imglog","imglog3",
+				   "Deskno","Name" }, 
+				   new int[] {  R.id.imglog, R.id.imglog3,R.id.roomId, R.id.roomName},callback);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
  
