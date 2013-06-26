@@ -70,7 +70,7 @@ public class DzpkGameRoomActivity extends BaseActivity{
         flipper.addView(new RoomView(this,2));
         flipper.addView(new RoomView(this,3));
         flipper.addView(new RoomView(this,4));
-        flipper.addView(new RoomView(this,5));
+//        flipper.addView(new RoomView(this,5));
         roomType=(TextView)findViewById(R.id.roomType);
         prev.setOnClickListener(listener);
         next.setOnClickListener(listener);
@@ -430,23 +430,23 @@ public class DzpkGameRoomActivity extends BaseActivity{
 			 GameApplication.tab=1;
 			 break;
 		 case 2:
-			 roomType.setText("业余场  ");
+			 roomType.setText("普通场  ");
 			 GameApplication.tab=2;
 			 break;
 		 case 3:
-			 roomType.setText("职业场  ");
+			 roomType.setText("高手场  ");
 			 GameApplication.tab=3;
 			 break;
 		 case 4:
 			 roomType.setText("专家场  ");
 			 GameApplication.tab=4;
 			 break;
-		 case 5:
-			 roomType.setText("快速场  ");
-			 break;
-		 case 6:
-			 roomType.setText("比赛场 "); 
-			 break;
+//		 case 5:
+//			 roomType.setText("快速场  ");
+//			 break;
+//		 case 6:
+//			 roomType.setText("比赛场 "); 
+//			 break;
 		 }
 	}
 	

@@ -212,8 +212,16 @@ public class DzpkGameStartActivity extends BaseActivity implements Runnable,Call
 		//先判断是否有保存当前用户信息
        
 		SharedPreferences uiState= this.getApplicationContext().getSharedPreferences("login",MODE_WORLD_READABLE);
-		final String userName=uiState.getString("userName", "").trim();
-		final String pwd=uiState.getString("pwd", "").trim(); 
+		String userName=uiState.getString("userName", "").trim();
+		String pwd=uiState.getString("pwd", "").trim(); 
+		
+		//加入这段代码，当默认进来时，以guest用户的身份进来
+		//如果有保存过用户名和密码，那么原来的流程不受影响
+		if(userName.equals("") && pwd.equals("")){
+			userName = "guest";
+			pwd = "guest";			
+		}
+		
 		 runing=false;
 		if(userName.equals("") && pwd.equals("")){
 			//表示没有保存历史,跳转到登陆界面

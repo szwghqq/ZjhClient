@@ -97,8 +97,8 @@ public class DzpkGameLoginActivity extends BaseActivity implements CallBack{
     	
     	//pwd.setText(DConfig.strKey);
     	
-    	   userName.setText("a");
-    	   pwd.setText("a");
+    	   userName.setText("guest");
+    	   pwd.setText("guest");
 //
 //    	  userName.setText("hwg19860119");
 //    	  pwd.setText("hwg19860119hwg");
